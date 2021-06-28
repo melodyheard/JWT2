@@ -1,0 +1,112 @@
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>login</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+    <script type="text/javascript" src="jquery-2.1.0.js" ></script>
+</head>
+<!--<body background="/images/background.jpg">-->
+<body  style="background-size:cover">
+<div class="container" style="margin-top: 60px">
+    <div class="row" style="margin-top: 100px">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-console"></span> login</h3>
+                </div>
+                <div class="panel-body">
+                    <form th:action="@{/login}" method="post">
+                        <div class="form-group" style="margin-top: 30px">
+                            <div class="input-group col-md-6 col-md-offset-3">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
+                                <input type="text" class="form-control" name="username" id="username" placeholder="username">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div class="input-group col-md-6 col-md-offset-3">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
+                                <input type="password" class="form-control" name="password" id="password"
+                                       placeholder="password">
+                            </div>
+                        </div>
+                        <br>
+<!--                        <div th:if="${param.error}">-->
+<!--                            <p style="text-align: center" class="text-danger">Login failed. Errors in password or username！</p>-->
+<!--                        </div>-->
+                        <div th:if="${result}">
+                            <p style="text-align: center" class="text-success" th:text="${result}"></p>
+                        </div>
+<!--                        <div th:if="${param.success}">-->
+<!--                            <p style="text-align: center" class="text-success">Register success! You can login now!</p>-->
+<!--                        </div>-->
+                        <div class="form-group">
+                            <div class="input-group col-md-6 col-md-offset-3 col-xs-12 ">
+                                <div id="login" onclick="login()" class="btn btn-primary btn-block">Login</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group col-md-6 col-md-offset-3 col-xs-12 ">
+                                <div id="register" onclick="register()" class="btn btn-primary btn-block">Register</div>
+                            </div>
+                        </div>
+<!--                        <div class="form-group">-->
+<!--                            <div class="input-group col-md-6 col-md-offset-3" style="text-align: center">-->
+<!--                                <a href="/register">Create a new account</a> | Forget password?-->
+<!--                            </div>-->
+<!--                        </div>-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function login(){
+        var username = $('#username').val();
+        var password = $('#password').val();
+        $.ajax({
+            type:"post",
+            url:"/JWT/api/login",
+            data:{
+                userName:username,
+                password:password
+            },
+            dataType:'json',
+            success:function (resp) {
+                alert(resp.msg);
+                if(resp.success){
+                    //store token to local, then turn to main page
+                    localStorage.setItem('token',resp.token);
+                    location.href="main.html";
+                }
+            }
+        });
+    }
+
+    function register(){
+        var username = $('#username').val();
+        var password = $('#password').val();
+        $.ajax({
+            type:"post",
+            url:"/JWT/api/register",
+            data:{
+                userName:username,
+                password:password
+            },
+            dataType:'json',
+            success:function (resp) {
+                alert(resp.msg);
+                if(resp.success){
+                    //store token to local, then turn to main page
+                }
+            }
+        });
+
+
+    }
+
+</script>
+</body>
+
+</html>
